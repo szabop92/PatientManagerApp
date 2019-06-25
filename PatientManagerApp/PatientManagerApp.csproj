@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Framework\ICloseable.cs" />
     <Compile Include="IWindowService.cs" />
     <Compile Include="Models\DataAccess.cs" />
     <Compile Include="Models\Helper.cs" />
