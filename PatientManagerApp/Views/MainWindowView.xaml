@@ -32,34 +32,27 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <DataGrid Height="Auto"
+        <ListView Height="Auto"
                   MaxHeight="400"
                   Margin="3"
                   ItemsSource="{Binding Patients}"
                   SelectedItem="{Binding SelectedPatient, Mode=TwoWay}"
                   SelectionMode="Single"
-                  SelectionUnit="FullRow"
-                  CanUserResizeColumns="True"
-                  CanUserResizeRows="False"
-                  CanUserSortColumns="True"
-                  CanUserDeleteRows="False"
-                  HeadersVisibility="Column"
-                  AutoGenerateColumns="False"
                   VerticalAlignment="Top"
                   HorizontalContentAlignment="Stretch"
-                  ColumnWidth="*"
-                  IsReadOnly="True"
                   Grid.Row="0" Grid.Column="0" Grid.RowSpan="11">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="Vezetéknév" Binding="{Binding LastName}" Width="100"/>
-                <DataGridTextColumn Header="Keresztnév" Binding="{Binding FirstName}" Width="100"/>
-                <DataGridTextColumn Header="Születés dátuma" Binding="{Binding DateOfBirth, ConverterCulture=hu-HU, StringFormat=d}" Width="100"/>
-                <DataGridTextColumn Header="TAJ szám" Binding="{Binding SocialSecurityNumber}" Width="100"/>
-                <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}" Width="120"/>
-                <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="150"/>
-            </DataGrid.Columns>
-        </DataGrid>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="0"/>
+                    <GridViewColumn Header="Vezetéknév" DisplayMemberBinding="{Binding LastName}" Width="100"/>
+                    <GridViewColumn Header="Keresztnév" DisplayMemberBinding="{Binding FirstName}" Width="100"/>
+                    <GridViewColumn Header="Születés dátuma" DisplayMemberBinding="{Binding DateOfBirth, ConverterCulture=hu-HU, StringFormat=d}" Width="100"/>
+                    <GridViewColumn Header="TAJ szám" DisplayMemberBinding="{Binding SocialSecurityNumber}" Width="100"/>
+                    <GridViewColumn Header="Telefon" DisplayMemberBinding="{Binding PhoneNumber}" Width="120"/>
+                    <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}" Width="150"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
         <Label Grid.Row="1" Grid.Column="1" Margin="10,0,0,0"
                Content="Vezetéknév:"/>
