@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace PatientManagerApp.Models
 {
@@ -8,16 +10,19 @@ namespace PatientManagerApp.Models
     {
         private const string _dbName = "Patient";
 
-        public IEnumerable<Patient> GetPatients()
+        public IEnumerable<Patient> GetPatients(int startIndex, int pageSize)
         {
-            var sql = @"SELECT [Id]
-                              ,[FirstName]
-                              ,[LastName]
-                              ,[DateOfBirth]
-                              ,[SocialSecurityNumber]
-                              ,[PhoneNumber]
-                              ,[Email]
-                          FROM [Datacenter].[Patients]";
+            var sql = $@"SELECT [Id]
+                               ,[FirstName]
+                               ,[LastName]
+                               ,[DateOfBirth]
+                               ,[SocialSecurityNumber]
+                               ,[PhoneNumber]
+                               ,[Email]
+                           FROM [Datacenter].[Patients]
+                       ORDER BY [LastName]
+                         OFFSET '{ startIndex }' ROWS
+                     FETCH NEXT '{ pageSize }' ROWS ONLY";
 
             using (var conn = new SqlConnection(Helper.CnnVal(_dbName)))
             using (var cmd = new SqlCommand(sql, conn))
@@ -44,6 +49,37 @@ namespace PatientManagerApp.Models
                 cmd.Dispose();
                 conn.Close();
             }
+        }
+
+        public int GetCountOfPatients()
+        {
+            var sql = $@"SELECT COUNT(*)
+                           FROM [Datacenter].[Patients]";
+
+            int result = 0;
+
+            using (var conn = new SqlConnection(Helper.CnnVal(_dbName)))
+            using (var cmd = new SqlCommand(sql, conn))
+            {
+                conn.Open();
+
+                using (var dataReader = cmd.ExecuteReader())
+                {
+                    if (dataReader.HasRows)
+                    {
+
+                    }
+                    dataReader.Read();
+                    dataReader.Close();
+                }
+
+                result = (int)cmd.ExecuteScalar();
+
+                cmd.Dispose();
+                conn.Close();
+            }
+
+            return result;
         }
 
         public void AddNewPatient(Patient patient)

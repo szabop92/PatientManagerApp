@@ -1,19 +1,27 @@
-﻿using PatientManagerApp.Models;
+﻿using PatientManagerApp.Framework;
+using PatientManagerApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace PatientManagerApp.ViewModels
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : INotifyPropertyChanged, IItemsProvider<Patient>
     {
         private readonly IDataAccess _db;
         private readonly IWindowService _service;
 
-        private List<Patient> _patients;
-        public List<Patient> Patients
+        private readonly int _numberOfItems = 50;
+        public int NumberOfItems
+        {
+            get { return _numberOfItems; }
+        }
+
+        private VirtualizingCollection<Patient> _patients;
+        public VirtualizingCollection<Patient> Patients
         {
             get { return _patients; }
             set
@@ -44,23 +52,35 @@ namespace PatientManagerApp.ViewModels
 
         private void FillPatients()
         {
-            Patients = new List<Patient>();
+            Patients = new VirtualizingCollection<Patient>(this, 50);
+        }
 
-            var patientRecords = _db.GetPatients();
+        public int FetchCount()
+        {
+            return _db.GetCountOfPatients();
+        }
 
-            foreach (var p in patientRecords)
+        public IList<Patient> FetchRange(int startIndex, int count)
+        {
+            IEnumerable<Patient> patientRecords = _db.GetPatients(startIndex, NumberOfItems);
+
+            IList<Patient> patients = new List<Patient>();
+
+            foreach (var record in patientRecords)
             {
-                Patients.Add(new Patient()
+                patients.Add(new Patient()
                 {
-                    Id = p.Id,
-                    FirstName = p.FirstName,
-                    LastName = p.LastName,
-                    DateOfBirth = p.DateOfBirth,
-                    SocialSecurityNumber = p.SocialSecurityNumber,
-                    PhoneNumber = p.PhoneNumber,
-                    Email = p.Email
+                    Id = record.Id,
+                    FirstName = record.FirstName,
+                    LastName = record.LastName,
+                    DateOfBirth = record.DateOfBirth,
+                    SocialSecurityNumber = record.SocialSecurityNumber,
+                    PhoneNumber = record.PhoneNumber,
+                    Email = record.Email
                 });
             }
+
+            return patients;
         }
 
         private ICommand _updatePatientCommand;
