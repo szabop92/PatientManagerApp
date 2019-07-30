@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 
 namespace PatientManagerApp.Models
 {
@@ -20,9 +18,9 @@ namespace PatientManagerApp.Models
                                ,[PhoneNumber]
                                ,[Email]
                            FROM [Datacenter].[Patients]
-                       ORDER BY [LastName]
-                         OFFSET '{ startIndex }' ROWS
-                     FETCH NEXT '{ pageSize }' ROWS ONLY";
+                       ORDER BY [Id]
+                         OFFSET { startIndex } ROWS
+                     FETCH NEXT { pageSize } ROWS ONLY";
 
             using (var conn = new SqlConnection(Helper.CnnVal(_dbName)))
             using (var cmd = new SqlCommand(sql, conn))

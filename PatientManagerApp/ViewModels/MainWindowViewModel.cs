@@ -14,7 +14,7 @@ namespace PatientManagerApp.ViewModels
         private readonly IDataAccess _db;
         private readonly IWindowService _service;
 
-        private readonly int _numberOfItems = 50;
+        private readonly int _numberOfItems = 100;
         public int NumberOfItems
         {
             get { return _numberOfItems; }
@@ -52,7 +52,7 @@ namespace PatientManagerApp.ViewModels
 
         private void FillPatients()
         {
-            Patients = new VirtualizingCollection<Patient>(this, 50);
+            Patients = new VirtualizingCollection<Patient>(this, NumberOfItems);
         }
 
         public int FetchCount()

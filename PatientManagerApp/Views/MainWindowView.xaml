@@ -12,6 +12,76 @@
         <vm:MainWindowViewModel />
     </Window.DataContext>
 
+    <Window.Resources>
+        <Style x:Key="lvStyle" TargetType="{x:Type ListView}">
+            <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
+            <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling"/>
+            <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="True"/>
+            <Setter Property="ListView.ItemsSource" Value="{Binding Patients}"/>
+            <Setter Property="ListView.View">
+                <Setter.Value>
+                    <GridView>
+                        <GridViewColumn Header="Id" Width="0">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Id}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Last Name" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding LastName}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="First Name" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding FirstName}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Date of Birth" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DateOfBirth, ConverterCulture=hu-HU, StringFormat=d}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Social Security Number" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding SocialSecurityNumber}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Phone Number" Width="120">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding PhoneNumber}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Email" Width="150">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Email}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                    <Setter Property="ListView.Cursor" Value="Wait"/>
+                    <Setter Property="ListView.Background" Value="LightGray"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -35,23 +105,12 @@
         <ListView Height="Auto"
                   MaxHeight="400"
                   Margin="3"
-                  ItemsSource="{Binding Patients}"
                   SelectedItem="{Binding SelectedPatient, Mode=TwoWay}"
                   SelectionMode="Single"
                   VerticalAlignment="Top"
                   HorizontalContentAlignment="Stretch"
-                  Grid.Row="0" Grid.Column="0" Grid.RowSpan="11">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="0"/>
-                    <GridViewColumn Header="Vezetéknév" DisplayMemberBinding="{Binding LastName}" Width="100"/>
-                    <GridViewColumn Header="Keresztnév" DisplayMemberBinding="{Binding FirstName}" Width="100"/>
-                    <GridViewColumn Header="Születés dátuma" DisplayMemberBinding="{Binding DateOfBirth, ConverterCulture=hu-HU, StringFormat=d}" Width="100"/>
-                    <GridViewColumn Header="TAJ szám" DisplayMemberBinding="{Binding SocialSecurityNumber}" Width="100"/>
-                    <GridViewColumn Header="Telefon" DisplayMemberBinding="{Binding PhoneNumber}" Width="120"/>
-                    <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}" Width="150"/>
-                </GridView>
-            </ListView.View>
+                  Grid.Row="0" Grid.Column="0" Grid.RowSpan="11"
+                  Style="{DynamicResource lvStyle}">
         </ListView>
 
         <Label Grid.Row="1" Grid.Column="1" Margin="10,0,0,0"
